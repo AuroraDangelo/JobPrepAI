@@ -7,7 +7,7 @@ const app =express()
 app.use(express.json()) //middleware ,basically it converts JSON into Javascripts objects
 app.use(cookieParser())
 app.use(cors({
-    origin: "https://jobprepai1-rzkd.onrender.com",
+    origin: "https://jobprepai-1-rzkd.onrender.com",
     credentials: true
 }))
 
