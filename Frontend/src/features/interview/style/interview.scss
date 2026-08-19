@@ -172,7 +172,7 @@ $severity-low: #3fb950;
     transition: border-color 0.2s;
 
     &:hover {
-        border-color: lighten($border-color, 8%);
+        border-color: #3d4a68;
     }
 
     &__header {
@@ -234,7 +234,7 @@ $severity-low: #3fb950;
         p {
             margin: 0;
             font-size: 0.835rem;
-            color: lighten($text-muted, 15%);
+            color: #a5adb9;
             line-height: 1.6;
         }
     }
@@ -338,7 +338,7 @@ $severity-low: #3fb950;
             align-items: flex-start;
             gap: 0.5rem;
             font-size: 0.845rem;
-            color: lighten($text-muted, 12%);
+            color: #9ba3af;
             line-height: 1.5;
         }
     }

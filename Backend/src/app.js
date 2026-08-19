@@ -7,7 +7,7 @@ const app =express()
 app.use(express.json()) //middleware ,basically it converts JSON into Javascripts objects
 app.use(cookieParser())
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }))
 

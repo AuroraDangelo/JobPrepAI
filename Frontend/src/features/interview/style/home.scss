@@ -8,6 +8,13 @@ $text-primary:   #e6edf3;
 $text-muted:     #7d8590;
 $accent:         #ff2d78;
 $accent-alt:     #ff6b9d;
+$accent-dark:    #e01962;
+$success:        #10b981;
+$success-bg:     rgba(16, 185, 129, 0.12);
+$success-border: rgba(16, 185, 129, 0.3);
+$danger:         #ef4444;
+$danger-bg:      rgba(239, 68, 68, 0.12);
+$danger-border:  rgba(239, 68, 68, 0.3);
 $badge-required: #ff2d78;
 $badge-best:     #ff2d78;
 $info-bg:        #1b2a4a;
@@ -62,10 +69,15 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     border: 1px solid $border-color;
     border-radius: 1rem;
     overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 
     &__body {
         display: flex;
         min-height: 520px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
     }
 
     &__footer {
@@ -74,10 +86,18 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
         justify-content: space-between;
         padding: 1rem 1.5rem;
         border-top: 1px solid $border-color;
+        background-color: rgba(0, 0, 0, 0.15);
 
         .footer-info {
             font-size: 0.8rem;
             color: $text-muted;
+        }
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+            text-align: center;
         }
     }
 }
@@ -87,6 +107,11 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     width: 1px;
     background-color: $border-color;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 1px;
+    }
 }
 
 .panel {
@@ -117,7 +142,6 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     }
 
     &__textarea {
-        flex: 1;
         width: 100%;
         background-color: $bg-input;
         border: 1px solid $border-color;
@@ -128,7 +152,7 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
         font-size: 0.875rem;
         resize: none;
         outline: none;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
         line-height: 1.5;
 
         &::placeholder {
@@ -137,23 +161,46 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
 
         &:focus {
             border-color: $accent;
+            box-shadow: 0 0 0 2px rgba($accent, 0.15);
         }
 
         &--short {
-            flex: unset;
             height: 96px;
         }
     }
 
     &--left {
-        position: relative;
+        .textarea-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
 
-        .char-counter {
-            position: absolute;
-            bottom: 2.25rem;
-            right: 2rem;
-            font-size: 0.75rem;
-            color: $text-muted;
+            .panel__textarea {
+                flex: 1;
+                min-height: 380px;
+                padding-bottom: 2rem;
+            }
+
+            .char-counter {
+                position: absolute;
+                bottom: 0.75rem;
+                right: 0.85rem;
+                font-size: 0.75rem;
+                color: $text-muted;
+                background-color: rgba(22, 27, 34, 0.85);
+                backdrop-filter: blur(4px);
+                padding: 0.2rem 0.5rem;
+                border-radius: 0.35rem;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                pointer-events: none;
+                transition: color 0.2s ease;
+
+                &--limit {
+                    color: $accent;
+                    font-weight: 600;
+                }
+            }
         }
     }
 
@@ -213,16 +260,30 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     border: 2px dashed $border-color;
     border-radius: 0.6rem;
     cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
 
     &:hover {
         border-color: $accent;
         background-color: rgba($accent, 0.05);
     }
 
+    &--dragging {
+        border-color: $accent !important;
+        background-color: rgba($accent, 0.12) !important;
+        box-shadow: 0 0 15px rgba($accent, 0.25);
+        transform: scale(1.01);
+    }
+
     &__icon {
         color: $accent;
         margin-bottom: 0.25rem;
+        transition: transform 0.2s ease;
+    }
+
+    &:hover &__icon {
+        transform: translateY(-2px);
     }
 
     &__title {
@@ -236,6 +297,176 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
         font-size: 0.75rem;
         color: $text-muted;
         margin: 0;
+    }
+
+    // ── Uploaded State ─────────────────────────────────────────────────────────
+    &--uploaded {
+        border: 1px solid $success-border;
+        background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, rgba(28, 34, 48, 0.6) 100%);
+        padding: 1rem;
+        gap: 0.75rem;
+        cursor: default;
+
+        &:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(28, 34, 48, 0.7) 100%);
+        }
+    }
+
+    &__confirmed-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background-color: $success-bg;
+        border: 1px solid $success-border;
+        color: #34d399;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.65rem;
+        border-radius: 9999px;
+        animation: fadeInBadge 0.3s ease-out;
+
+        svg {
+            stroke: #34d399;
+        }
+    }
+
+    &__file-card {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        width: 100%;
+        background-color: rgba(22, 27, 34, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    &__file-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        background-color: rgba($accent, 0.15);
+        color: $accent;
+        border-radius: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    &__ext-badge {
+        position: absolute;
+        bottom: -3px;
+        right: -3px;
+        background-color: $accent;
+        color: #ffffff;
+        font-size: 0.55rem;
+        font-weight: 700;
+        padding: 0.1rem 0.25rem;
+        border-radius: 0.2rem;
+        line-height: 1;
+    }
+
+    &__file-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        flex: 1;
+        min-width: 0; // Ensures text truncation works
+    }
+
+    &__file-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__file-size {
+        font-size: 0.725rem;
+        color: $text-muted;
+    }
+
+    &__file-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    &__action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 0.35rem;
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: $text-primary;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        &--delete {
+            &:hover {
+                background-color: rgba($danger, 0.18);
+                border-color: $danger-border;
+                color: $danger;
+            }
+        }
+    }
+}
+
+@keyframes fadeInBadge {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── File & Form Errors ────────────────────────────────────────────────────────
+.file-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: $danger-bg;
+    border: 1px solid $danger-border;
+    color: #f87171;
+    font-size: 0.775rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.4rem;
+    margin-top: 0.25rem;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: $danger-bg;
+    border-top: 1px solid $danger-border;
+    border-bottom: 1px solid $danger-border;
+    color: #f87171;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+
+    svg {
+        flex-shrink: 0;
     }
 }
 
@@ -301,18 +532,20 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, $accent 0%, darken($accent, 10%) 100%);
+    background: linear-gradient(135deg, $accent 0%, $accent-dark 100%);
     color: #fff;
     font-size: 0.9rem;
     font-weight: 600;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
+    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
     font-family: $font-stack;
+    box-shadow: 0 4px 12px rgba($accent, 0.35);
 
     &:hover {
-        opacity: 0.9;
+        opacity: 0.95;
+        box-shadow: 0 6px 16px rgba($accent, 0.45);
     }
 
     &:active {
@@ -320,40 +553,61 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     }
 }
 
-.recent-reports{
+.recent-reports {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     width: 100%;
     max-width: 900px;
 
-    .reports-list{
+    .reports-list {
         display: flex;
         gap: 0.75rem;
         flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        margin: 0;
 
-        .report-item{
+        .report-item {
             background-color: $bg-card;
             border: 1px solid $border-color;
             border-radius: 0.5rem;
             padding: 1rem;
             flex: 1;
+            min-width: 260px;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             cursor: pointer;
-            flex-shrink: 0;
+            transition: border-color 0.2s, transform 0.15s;
+
+            &:hover {
+                border-color: $accent;
+                transform: translateY(-2px);
+            }
+
+            h3 {
+                font-size: 0.95rem;
+                font-weight: 600;
+                margin: 0;
+                color: $text-primary;
+            }
+
+            .report-meta {
+                font-size: 0.75rem;
+                color: $text-muted;
+                margin: 0;
+            }
 
             .match-score {
                 font-size: 0.8rem;
                 font-weight: 600;
                 color: $accent;
-                align-items: flex-start;
+                margin: 0;
             }
         }
     }
 }
-
 
 // ── Page Footer ───────────────────────────────────────────────────────────────
 .page-footer {
@@ -370,4 +624,4 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
             color: $text-primary;
         }
     }
-}  
+}
