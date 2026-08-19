@@ -109,12 +109,6 @@ npm run dev
 
 ---
 
-## Screenshots
-
-Screenshots will be added as the project progresses.
-
----
-
 ## Author
 
 **Anshika Pandey**
