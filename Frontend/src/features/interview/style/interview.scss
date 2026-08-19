@@ -56,11 +56,48 @@ $severity-low: #3fb950;
     padding: 1.75rem 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 0.25rem;
 
+    .nav-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
 
+    &__back {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.65rem 0.75rem;
+        margin-bottom: 1.25rem;
+        background-color: $bg-panel;
+        border: 1px solid $border-color;
+        border-radius: 0.5rem;
+        color: $text-primary;
+        font-family: $font-stack;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
 
+        svg {
+            stroke: $text-muted;
+            transition: transform 0.2s ease, stroke 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        &:hover {
+            background-color: rgba($accent, 0.1);
+            border-color: rgba($accent, 0.35);
+            color: $accent;
+
+            svg {
+                stroke: $accent;
+                transform: translateX(-3px);
+            }
+        }
+    }
 
     &__label {
         font-size: 0.7rem;
