@@ -87,5 +87,5 @@ export const useInterview = () => {
         }
     }, [ interviewId ])
 
-    return { loading, report, reports, generateReport, getReportById, getReports }
+    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf  }
 }

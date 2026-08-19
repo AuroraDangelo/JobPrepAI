@@ -166,7 +166,7 @@ const Home = () => {
                                 {jobDescription.length} / 5000 chars
                             </div>
                         </div>
-                    </div>
+                    </div> 
 
                     {/* Vertical Divider */}
                     <div className='panel-divider' />

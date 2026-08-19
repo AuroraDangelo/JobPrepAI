@@ -1,13 +1,26 @@
-const express =require("express")
+const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 
-const app =express()
+const app = express()
 
 app.use(express.json()) //middleware ,basically it converts JSON into Javascripts objects
 app.use(cookieParser())
+
+const allowedOrigins = [
+    "https://jobprepai-1-rzkd.onrender.com",
+    "http://localhost:5173",
+    process.env.CLIENT_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, true);
+        }
+    },
     credentials: true
 }))
 
@@ -17,7 +30,6 @@ const interviewRouter = require("./routes/interview.routes")
 
 /*using all the routes here */
 app.use("/api/auth", authRouter)
-app.use("/api/interview", interviewRouter )
-
+app.use("/api/interview", interviewRouter)
 
 module.exports = app
